@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from PIL import Image
 import io
@@ -21,7 +22,6 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     if st.button("開く"):
-        # 既存のドライバーを閉じる
         if st.session_state.driver:
             st.session_state.driver.quit()
         
@@ -30,12 +30,16 @@ with col1:
             options.add_argument('--headless')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
+            options.add_argument("--disable-gpu")
+            options.add_argument("--window-size=1920,1080")
             
-            # Renderでは /usr/bin/chromium-browser
             if os.path.exists('/usr/bin/chromium-browser'):
                 options.binary_location = '/usr/bin/chromium-browser'
 
-            driver = webdriver.Chrome(options=options)
+            # ← ここが重要
+            service = Service('/usr/bin/chromedriver')
+            driver = webdriver.Chrome(service=service, options=options)
+            
             driver.set_window_size(1920, 1080)
             driver.get(url)
             st.session_state.driver = driver
