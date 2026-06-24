@@ -1,0 +1,5 @@
+streamlit==1.40.0
+selenium==4.15.2
+webdriver-manager==4.0.1
+pillow==10.1.0
+google-chrome-stable
