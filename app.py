@@ -31,14 +31,14 @@ with col1:
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument("--disable-gpu")
-            options.add_argument("--window-size=1920,1080")
+            options.add_argument("--window-size=1280,720")
     
             if os.path.exists('/usr/bin/chromium-browser'):
                 options.binary_location = '/usr/bin/chromium-browser'
 
             # Service を指定せず、Selenium に自動検出させる
             driver = webdriver.Chrome(options=options)
-            driver.set_window_size(1920, 1080)
+            driver.set_window_size(1280, 720)
             driver.get(url)
             st.session_state.driver = driver
             st.session_state.current_url = url
@@ -54,6 +54,11 @@ with col3:
     if st.button("↑ スクロール上"):
         if st.session_state.driver:
             st.session_state.driver.execute_script("window.scrollBy(0, -300);")
+
+# フルサイズボタン
+if st.button("フルサイズ (1920x1080)"):
+    if st.session_state.driver:
+        st.session_state.driver.set_window_size(1920, 1080)
 
 # スクリーンショット表示
 if st.session_state.driver:
