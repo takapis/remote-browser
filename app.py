@@ -44,6 +44,34 @@ with col1:
             st.session_state.current_url = url
         except Exception as e:
             st.error(f"エラーだわよ: {e}")
+            
+        # 「開く」ボタンの後に以下を追加
+
+if st.session_state.driver:
+    try:
+        # JavaScript でパフォーマンス情報を取得
+        perf_data = st.session_state.driver.execute_script("""
+            var perf = window.performance.getEntriesByType('navigation')[0];
+            return {
+                'dns': perf.domainLookupEnd - perf.domainLookupStart,
+                'tcp': perf.connectEnd - perf.connectStart,
+                'ttfb': perf.responseStart - perf.requestStart,
+                'download': perf.responseEnd - perf.responseStart,
+                'dom': perf.domInteractive - perf.responseEnd,
+                'total': perf.loadEventEnd - perf.fetchStart
+            };
+        """)
+        
+        st.write("**📊 ネットワーク詳細:**")
+        st.write(f"- DNS 解決: {perf_data['dns']:.0f}ms")
+        st.write(f"- TCP 接続: {perf_data['tcp']:.0f}ms")
+        st.write(f"- TTFB (初回バイト): {perf_data['ttfb']:.0f}ms")
+        st.write(f"- ダウンロード: {perf_data['download']:.0f}ms")
+        st.write(f"- DOM 処理: {perf_data['dom']:.0f}ms")
+        st.write(f"- **合計: {perf_data['total']:.0f}ms**")
+    except:
+        pass
+
 
 with col2:
     if st.button("↓ スクロール下"):
