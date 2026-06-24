@@ -32,20 +32,18 @@ with col1:
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument("--disable-gpu")
             options.add_argument("--window-size=1920,1080")
-            
+    
             if os.path.exists('/usr/bin/chromium-browser'):
                 options.binary_location = '/usr/bin/chromium-browser'
 
-            # ← ここが重要
-            service = Service('/usr/bin/chromedriver')
-            driver = webdriver.Chrome(service=service, options=options)
-            
+            # Service を指定せず、Selenium に自動検出させる
+            driver = webdriver.Chrome(options=options)
             driver.set_window_size(1920, 1080)
             driver.get(url)
             st.session_state.driver = driver
             st.session_state.current_url = url
         except Exception as e:
-            st.error(f"エラー: {e}")
+            st.error(f"エラーだわよ: {e}")
 
 with col2:
     if st.button("↓ スクロール下"):
