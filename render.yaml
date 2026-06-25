@@ -1,0 +1,19 @@
+# Exported from Render on 2026-06-25T08:39:53Z
+version: "1"
+projects:
+- name: RM-browser
+  environments:
+  - name: Production
+    services:
+    - type: web
+      name: koshki
+      runtime: python
+      repo: https://github.com/takapis/remote-browser
+      plan: free
+      envVars:
+      - key: requirements.txt
+        sync: false
+      region: Singapore
+      buildCommand: pip install -r requirements.txt
+      startCommand: streamlit run app.py --server.port=10000 --server.address=0.0.0.0
+      autoDeployTrigger: commit
